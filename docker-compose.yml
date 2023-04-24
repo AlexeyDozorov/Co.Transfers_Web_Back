@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  # Application
+  csr:
+    image:  5e0b15fa58b0
+    container_name: CoTransfer
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - 8080:8080
+    depends_on:
+      - database-postgres
+
+  #  PostgreSQL
+  database-postgres:
+    image: postgres:14
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=CoTransfer
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - 5433:5432
+    volumes:
+      - ./postgres-data:/var/lib/postgresql

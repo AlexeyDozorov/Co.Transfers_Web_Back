@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/db_changelog/create_table_users.sql
+  - include:
+      file: liquibase/db_changelog/create_table_transfers.sql
+  - include:
+      file: liquibase/db_changelog/create_table_transfer_user.sql
