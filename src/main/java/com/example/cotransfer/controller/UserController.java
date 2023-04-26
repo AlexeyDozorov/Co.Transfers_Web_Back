@@ -31,8 +31,8 @@ public class UserController {
 
     @GetMapping("/all-transfers")
     @PreAuthorize("hasRole('USER')")
-    public Set<Transfer> getAllUserTransfers(@RequestHeader(name = "id") Long id){
-        return userService.getAllUserTransfers(id);
+    public Set<Transfer> getAllUserTransfers(){
+        return userService.getAllUserTransfers();
     }
 
 //    @GetMapping("/allTransfers")
@@ -41,11 +41,4 @@ public class UserController {
 //        return allUserTransfers;
 //    }
 
-    @PostMapping("/create-user/{id}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> createUser(@PathVariable("id") Long id,
-                                         @RequestBody String user){
-        userService.createUser(id, user);
-        return ResponseEntity.ok("Пользователь создан");
-    }
 }

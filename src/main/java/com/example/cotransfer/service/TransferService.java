@@ -12,20 +12,17 @@ import java.util.List;
 @Service
 public interface TransferService {
 
-    List<Transfer> getAllTransfers();
 
-    Transfer getTransfer(Long id);
-
-    void save(Transfer transfer);
 
     ResponseEntity<?> deleteTransfer(String transfer);
 
-    void update(Transfer transfer);
 
-    ResponseEntity<?> createTransferFromAirport(String transfer, Long id);
+    ResponseEntity<?> createTransferFromAirport(String transfer);
 
     ResponseEntity<?> updateTransfer(String transfer);
 
-    void deleteTransfer(Transfer transfer);
 
+    Transfer getTransfer(Long id);
+
+    List<Transfer> getAllTransfers();
 }

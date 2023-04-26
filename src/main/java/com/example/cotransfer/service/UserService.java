@@ -14,17 +14,18 @@ public interface UserService {
 
     List<User> getAllUsers();
 
+
     User getUser(Long id);
 
     User getUserByEmail(String email);
 
     void save(User user);
 
+
     void deleteUser(Long id);
 
     void update(User user);
 
-    void createUser(Long transferId, String user);
+    Set<Transfer> getAllUserTransfers();
 
-    Set<Transfer> getAllUserTransfers(Long id);
 }

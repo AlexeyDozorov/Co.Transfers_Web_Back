@@ -99,7 +99,7 @@ public class CoTransferBot extends TelegramLongPollingBot {
         else if((update.hasMessage() && transferRepository.findAll().get(0).getIsDeleted())){
             Optional<Transfer> deletedTransfer = transferRepository.findById(Long.valueOf(update.getMessage().getText()));
 
-            transferService.deleteTransfer(deletedTransfer.get());
+            transferService.deleteTransfer(String.valueOf(deletedTransfer.get()));
 
             List<Transfer> allTransfers = transferRepository.findAll();
 

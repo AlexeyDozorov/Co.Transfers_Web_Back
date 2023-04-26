@@ -28,8 +28,8 @@ public class TransferController {
     }
 
     @PostMapping("/create-transfer")
-    private ResponseEntity<?> createTransfer(@RequestBody String transfer, @RequestHeader(name = "id") Long id) {
-        return ResponseEntity.ok(transferService.createTransferFromAirport(transfer, id));
+    private ResponseEntity<?> createTransfer(@RequestBody String transfer) {
+        return ResponseEntity.ok(transferService.createTransferFromAirport(transfer));
     }
 
     @PutMapping("/updateTransfer")

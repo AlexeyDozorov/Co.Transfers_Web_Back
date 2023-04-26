@@ -6,11 +6,12 @@ import com.example.cotransfer.model.User;
 import com.example.cotransfer.repository.TransferRepository;
 import com.example.cotransfer.repository.TransferUserRepository;
 import com.example.cotransfer.repository.UserRepository;
+import com.example.cotransfer.security.CustomUserDetails;
 import com.example.cotransfer.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -80,37 +81,19 @@ public class UserServiceImplementation implements UserService {
         log.info("Пользователь с id {} обновлен", user.getId());
     }
 
-    @Override
-    public void createUser(Long transferId, String user) {
-        log.info("Создание пользователя");
-        JSONObject jsonObject = new JSONObject(user);
-        Optional<Transfer> transfer = transferRepository.findById(transferId);
-        User newUser = new User();
-        String name = jsonObject.getString("FCs");
-        List<String> nameList = List.of(name.split(" "));
-        newUser.setName(nameList.get(0));
-        newUser.setArrivalDate(jsonObject.getString("arrivalDate"));
-        newUser.setFlightNumber(jsonObject.getString("flightNumber"));
-        newUser.setPhoneNumber(jsonObject.getString("phoneNumber"));
-        newUser.setEmail(jsonObject.getString("email"));
-        newUser.setTelegramLogin(jsonObject.getString("telegramLogin"));
-        newUser.setTripComment(jsonObject.getString("tripComment"));
-        newUser.setTransfer((List<Transfer>) transfer.get());
-        userRepository.save(newUser);
-        log.info("Пользователь создан");
-    }
 
     @Override
-    public Set<Transfer> getAllUserTransfers(Long id) {
-        log.info("Получение всех поездок пользователя с id {}:", id);
-        List<TransferUser> allTransferUser = transferUserRepository.findAllByUserIdentificationNumber(id);
+    public Set<Transfer> getAllUserTransfers() {
+        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = customUserDetails.getUser();
+        List<TransferUser> allTransferUser = transferUserRepository.findAllByUserId(user);
+        log.info("Получение всех поездок пользователя с id {}:", user.getId());
         Set<Transfer> allTransfers = new HashSet<>();
         for (TransferUser tempTransferUser : allTransferUser) {
             allTransfers.add(tempTransferUser.getTransferId());
         }
-        
         for (Transfer newTransfer : allTransfers) {
-            List<TransferUser> transferUser = new ArrayList<>();
+            List<TransferUser> transferUser;
             List<User> userList = new ArrayList<>();
             transferUser = transferUserRepository.findAllByTransferId(newTransfer);
             for (TransferUser newTrans: transferUser) {
@@ -118,7 +101,7 @@ public class UserServiceImplementation implements UserService {
             }
             newTransfer.setUsers(userList);
         }
-        log.info("Все поездки пользователя с id {} " + "получены", id);
+        log.info("Все поездки пользователя с id {} получены", user.getId());
 
         return allTransfers;
 

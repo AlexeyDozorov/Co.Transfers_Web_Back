@@ -67,4 +67,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "user_id_id")
     )
     private List<Transfer> transfer;
+
+
 }
